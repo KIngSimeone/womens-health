@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api_utils',
     'data_transformer',
-    'errors'
+    'errors',
+    'women'
 ]
 
 MIDDLEWARE = [
