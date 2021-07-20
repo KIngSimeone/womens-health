@@ -30,7 +30,9 @@ ROOT_SECRET = os.getenv('ROOT_SECRET')
 DEBUG = True
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+# Add 'prefix' to all urlpatterns
+API_VERSION = os.getenv('API_VERSION')
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
