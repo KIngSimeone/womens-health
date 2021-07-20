@@ -48,16 +48,17 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'womens_health.urls'
+ROOT_URLCONF = 'womens_health_config.urls'
 
 TEMPLATES = [
     {
@@ -75,7 +76,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'womens_health.wsgi.application'
+WSGI_APPLICATION = 'womens_health_config.wsgi.application'
+ASGI_APPLICATION = 'womens_health_config.asgi.application'
 
 
 # Database
@@ -88,6 +90,18 @@ DATABASES = {
     }
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = [
+    'Access-Control-Allow-Methods',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Max-Age'
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Secret',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
