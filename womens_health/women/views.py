@@ -64,3 +64,7 @@ def createCycles(request):
     
     updatedpatientPeriodInfo, msg = updatePeriodInfo(patientPeriodInfo, cycle_average, period_average,
                                                     last_period_date)
+    if not updatedpatientPeriodInfo:
+        return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
+
+    
