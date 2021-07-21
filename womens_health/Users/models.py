@@ -3,17 +3,12 @@ from django.utils.timezone import now
 
 
 class Patient(models.Model):
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
     id = models.AutoField(primary_key=True, editable=False, unique=True)
     first_name = models.TextField()
     last_name = models.TextField()
     email = models.TextField()
     phone = models.TextField()
     address = models.TextField(null=True)
-    gender = models.TextField(null=True, max_length=1, choices=GENDER_CHOICES)
     birthday = models.DateField(null=True)
     password = models.TextField()
     image = models.TextField(null=True)
