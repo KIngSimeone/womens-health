@@ -7,6 +7,7 @@ def validateThatStringIsEmptyAndClean(value):
     not_empty = (len(value.strip()) != 0)
     return (is_clean and not_empty)
 
+
 def validateEmailFormat(email):
     emailPattern = r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$'
 
@@ -20,6 +21,7 @@ def validatePhoneFormat(phone):
         return False
     else:
         return True
+
 
 def validateKeys(payload, requiredKeys):
     # extract keys from payload
@@ -39,6 +41,7 @@ def validate_input_list_is_empty_and_clean(inputList):
     for item in inputList:
         if validateThatStringIsEmptyAndClean(item):
             return True
+
 
 def validateInputFormat(inputList, email, phone):
     if not validate_input_list_is_empty_and_clean(inputList):
