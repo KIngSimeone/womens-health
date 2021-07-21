@@ -5,6 +5,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
 from .models import Patient
@@ -19,11 +20,30 @@ def getExpiresAt(minutes=None):
 
     return (timezone.now() + timedelta(minutes=minutes))
 
-def getPatientByInputs(username, phone, email):
-    """retrieve single patient record"""
-    if getPatientByUsername(username) is not None:
-        return False, f"Staff with same username already exists: {username}"
+def getPatientByPhone(phone):
+    """retrieve patient by phone"""
+    try:
+        patient = Patient.objects.get(phone=phone)
+        return patient
 
+    except ObjectDoesNotExist as e:
+        logger.error(f"Patient with phone: {phone} does not exist")
+        logger.error(e)
+        return None
+
+def getPatientByEmail(email):
+    """retrieve patient by email"""
+    try:
+        patient = Patient.objects.get(email=email)
+        return patient
+
+    except ObjectDoesNotExist as e:
+        logger.error(f"Patient with email: {email} does not exist")
+        logger.error(e)
+        return None
+
+def getPatientByInputs(phone, email):
+    """retrieve single patient record"""
     if getPatientByPhone(phone) is not None:
         return False, f"Staff with same phone already exists: {phone}"
 
