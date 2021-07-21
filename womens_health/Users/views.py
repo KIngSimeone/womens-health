@@ -8,12 +8,13 @@ from api_utils.views import (
     unAuthorizedResponse, successResponse, resourceNotFoundResponse,
 )
 from api_utils.validators import (
-    validateKeys, validateInputFormat
+    validateKeys, validateInputFormat, validateThatStringIsEmpty
 )
 from .utils import (
-    createPatient
+    createPatient, getPatientByInputs
 )
 from data_transformer.views import dateIsISO
+from data_transformer.json_serializer import transformPatient
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ def provisionPatient(request):
 
     # validate input format
     valid_input, msg = validateInputFormat(
-        (firstname, lastname, username), email, phone)
+        (firstname, lastname), email, phone)
     if not valid_input:
         return requestResponse(badRequestResponse, ErrorCodes.GENERIC_ERROR, msg)
 
@@ -59,18 +60,17 @@ def provisionPatient(request):
         return requestResponse(badRequestResponse, ErrorCodes.GENERIC_ERROR, "Password cannot be empty")
 
     # check if inputs already exists
-    valid_input, msg = get_staff_by_inputs(username, phone, email)
+    valid_input, msg = getPatientByInputs(phone, email)
     if not valid_input:
         return requestResponse(resourceConflictResponse, ErrorCodes.USER_ALREADY_EXISTS, msg)
 
-    # check if company exists
-    check_company, err = retrieve_company_by_id(company.id)
-    if check_company is None:
-        return requestResponse(resourceNotFoundResponse, ErrorCodes.COMPANY_DOES_NOT_EXIST, str(err))
+    if not dateIsISO(birthday):
+        return requestResponse(badRequestResponse, ErrorCodes.GENERIC_ERROR, "Date of birth is invalid or empty - It must be in YYYY-MM-DD format")
 
-    # create the staff
-    staff, msg = create_staff_record(firstname, lastname, username, email, phone, password, company, staff_role)
-    if not staff:
-        return requestResponse(internalServerErrorResponse, ErrorCodes.USER_CREATION_FAILED, msg)
+    # create the patient
+    patient, msg = createPatient(firstname, lastname, email, phone, password, birthday)
+    if not patient:
+        return requestResponse(internalServerErrorResponse, 
+                              ErrorCodes.USER_CREATION_FAILED, msg)
 
-    return successResponse(message="Account successfully created", body=transformStaff(staff))
+    return successResponse(message="Account successfully created", body=transformPatient(patient))
