@@ -11,6 +11,7 @@ from django.conf import settings
 from errors.views import ErrorCodes
 from Users.utils import getUserByAccessToken
 from api_utils.validators import validateKeys
+from .utils import createPeriodInfo, updatePeriodInfo
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ def createCycles(request):
                                 "Your session has expired. Please login.")
 
     # check if required fields are present in request payload
-    missing_keys = validateKeys(payload=body, requiredKeys=['Last_period_date', 'lastName', 'email', 'phone', 'password', 'birthday'])
+    missing_keys = validateKeys(payload=body, requiredKeys=['Last_period_date', 'Cycle_average', 'Period_average', 'Start_date', 'password', 'end_date'])
     if missing_keys:
         return requestResponse(
             badRequestResponse, ErrorCodes.MISSING_FIELDS,
