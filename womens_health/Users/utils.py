@@ -20,6 +20,7 @@ def getExpiresAt(minutes=None):
 
     return (timezone.now() + timedelta(minutes=minutes))
 
+
 def getPatientByPhone(phone):
     """retrieve patient by phone"""
     try:
@@ -30,6 +31,7 @@ def getPatientByPhone(phone):
         logger.error(f"Patient with phone: {phone} does not exist")
         logger.error(e)
         return None
+
 
 def getPatientByEmail(email):
     """retrieve patient by email"""
@@ -42,6 +44,7 @@ def getPatientByEmail(email):
         logger.error(e)
         return None
 
+
 def getPatientByInputs(phone, email):
     """retrieve single patient record"""
     if getPatientByPhone(phone) is not None:
@@ -51,6 +54,7 @@ def getPatientByInputs(phone, email):
         return False, f"Staff with email already exists: {email}"
 
     return True, "success"
+
 
 def createPatient(firstname, lastname, email, phone, password, birthday):
     """creating new patient"""
