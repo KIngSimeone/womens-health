@@ -10,6 +10,7 @@ class ErrorCodes(IntEnum):
     MISSING_FIELDS = 3
     USER_ALREADY_EXISTS = 4
     USER_CREATION_FAILED = 5
+    INVALID_CREDENTIALS = 6
 
 
 # base error
