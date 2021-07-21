@@ -19,8 +19,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('users', include('Users.urls')),
 ]
 
 # Add 'prefix' to all urlpatterns
 if settings.API_VERSION:
-	urlpatterns = [path(f'{settings.API_VERSION}/', include(urlpatterns))]
+    urlpatterns = [path(f'{settings.API_VERSION}/', include(urlpatterns))]

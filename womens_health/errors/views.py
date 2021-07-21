@@ -8,6 +8,8 @@ class ErrorCodes(IntEnum):
     UNAUTHENTICATED_REQUEST = 1
     UNAUTHORIZED_REQUEST = 2
     MISSING_FIELDS = 3
+    USER_ALREADY_EXISTS = 4
+    USER_CREATION_FAILED = 5
 
 
 # base error

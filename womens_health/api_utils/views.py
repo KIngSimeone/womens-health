@@ -1,5 +1,7 @@
-from django.http import JsonResponse
 from http import HTTPStatus
+
+from django.http import JsonResponse
+from errors.views import getError
 
 
 def badRequestResponse(data):
@@ -51,3 +53,8 @@ def successResponse(httpStatusCode=HTTPStatus.OK, message="", body={}, paginatio
     response = JsonResponse(responseData, status=httpStatusCode, safe=False)
 
     return response
+
+
+def requestResponse(type, code, msg):
+    """error code repsonse for all endpoints"""
+    return type(getError(code, msg))
