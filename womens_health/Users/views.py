@@ -5,7 +5,7 @@ from errors.views import ErrorCodes
 from api_utils.views import (
     badRequestResponse, resourceConflictResponse, internalServerErrorResponse,
     unAuthenticatedResponse, requestResponse,
-    unAuthorizedResponse, successResponse, resourceNotFoundResponse,
+    unAuthorizedResponse, successResponse, resourceNotFoundResponse
 )
 from api_utils.validators import (
     validateKeys, validateInputFormat, validateThatStringIsEmpty
@@ -15,7 +15,7 @@ from .utils import (
     authenticateUser
 )
 from data_transformer.views import dateIsISO
-from data_transformer.json_serializer import transformPatient
+from data_transformer.json_serializer import transformPatient, userLoginResponse
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
