@@ -117,6 +117,7 @@ def authenticateUser(userIdentity, password):
 
 
 def generateUserAccessToken(user):
+    """Generate new access token for user"""
     try:
         userId = user.id
         existingAccessToken = None
@@ -154,6 +155,7 @@ def generateUserAccessToken(user):
 
 
 def getUserByAccessToken(accessToken):
+    """Get user by the access token"""
     try:
         filteredTokens = UserAccessTokens.objects.filter(
             access_token=accessToken)
