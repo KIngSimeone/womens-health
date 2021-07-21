@@ -29,3 +29,10 @@ def toUiReadableDateFormat(value):
     except Exception as ex:
         logger.error(ex)
         return str(value)
+
+def stringIsInteger(value):
+    try:
+        convertedValue = int(value)
+        return convertedValue
+    except ValueError:
+        return False
