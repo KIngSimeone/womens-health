@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
-from .models import Patient
+from .models import Patient, UserAccessTokens
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -20,6 +20,16 @@ def getExpiresAt(minutes=None):
 
     return (timezone.now() + timedelta(minutes=minutes))
 
+def getPatientById(patientId):
+    """return patient by id"""
+    try:
+        patient = Patient.objects.get(id=patientId)
+        return patient, "success"
+
+    except ObjectDoesNotExist as e:
+        logger.error(f"Patient with ID: {patient} does not exist")
+        logger.error(e)
+        return None, str(e)
 
 def getPatientByPhone(phone):
     """retrieve patient by phone"""
@@ -75,3 +85,31 @@ def createPatient(firstname, lastname, email, phone, password, birthday):
             "createPatient@Error :: Error occurred while creating the patient")
         logger.error(e)
         return None, str(e)
+
+def getUserByAccessToken(accessToken):
+    try:
+        filteredTokens = UserAccessTokens.objects.filter(
+            access_token=accessToken)
+
+        if filteredTokens.count() > 0:
+            accessTokenRecord = filteredTokens[0]
+
+            if accessTokenRecord.expires_at > timezone.now():
+                associatedUserId = accessTokenRecord.user_id
+
+                associatedUser, msg = getPatientById(associatedUserId)
+                if associatedUser is not None:
+                    associatedUser.last_active_on = timezone.now()
+                    # push token expiry date forward
+                    minutes = 60
+                    accessTokenRecord.expires_at = getExpiresAt(minutes)
+                    accessTokenRecord.save()
+
+                    return associatedUser
+
+        return None
+
+    except Exception as e:
+        logger.error('getUserByAccessToken@Error')
+        logger.error(e)
+        return None
