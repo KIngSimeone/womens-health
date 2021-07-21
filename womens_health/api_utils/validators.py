@@ -2,6 +2,11 @@ import re
 from data_transformer.views import stringIsInteger
 
 
+def validateThatStringIsEmptyAndClean(value):
+    is_clean = (re.compile(r'[@_!#$%^&*()<>?/\|}{~:]').search(value) is None)
+    not_empty = (len(value.strip()) != 0)
+    return (is_clean and not_empty)
+
 def validateEmailFormat(email):
     emailPattern = r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$'
 
