@@ -6,6 +6,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.utils import timezone
 
 from .models import Patient, UserAccessTokens
@@ -87,6 +88,32 @@ def createPatient(firstname, lastname, email, phone, password, birthday):
             "createPatient@Error :: Error occurred while creating the patient")
         logger.error(e)
         return None, str(e)
+
+
+def authenticateUser(userIdentity, password):
+    """Authenticate user"""
+    try:
+        # retrieve user
+        users = Patient.objects.filter(
+            Q(phone__iexact=userIdentity) | Q(email__iexact=userIdentity))
+        if users.count() > 0:
+            existingUser = users[0]
+            if not existingUser.is_active:
+                return None
+            # compare if both hashes are the same
+            if check_password(password, existingUser.password):
+                existingUser.last_active_on = timezone.now()
+                existingUser.save()
+
+                return existingUser
+
+        return None
+
+    except Exception as e:
+        logger.error(
+            "authenticateUser@Error :: Error occurred while authenticating user")
+        logger.error(e)
+        return None
 
 
 def generateUserAccessToken(user):
