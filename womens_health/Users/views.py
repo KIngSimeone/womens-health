@@ -35,8 +35,8 @@ def login(request):
     missing_keys = validateKeys(payload=body, requiredKeys=['userIdentity', 'password'])
     if missing_keys:
         return requestResponse(badRequestResponse,
-                                ErrorCodes.MISSING_FIELDS, "The following key(s) are missing in the request "
-                                f"payload: {missing_keys}")
+                               ErrorCodes.MISSING_FIELDS, "The following key(s) are missing in the request "
+                               f"payload: {missing_keys}")
     user_identity = body['userIdentity'].strip()
     password = body['password']
 
