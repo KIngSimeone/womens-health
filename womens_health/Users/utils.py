@@ -20,6 +20,7 @@ def getExpiresAt(minutes=None):
 
     return (timezone.now() + timedelta(minutes=minutes))
 
+
 def getPatientById(patientId):
     """return patient by id"""
     try:
@@ -30,6 +31,7 @@ def getPatientById(patientId):
         logger.error(f"Patient with ID: {patient} does not exist")
         logger.error(e)
         return None, str(e)
+
 
 def getPatientByPhone(phone):
     """retrieve patient by phone"""
@@ -85,6 +87,44 @@ def createPatient(firstname, lastname, email, phone, password, birthday):
             "createPatient@Error :: Error occurred while creating the patient")
         logger.error(e)
         return None, str(e)
+
+
+def generateUserAccessToken(user):
+    try:
+        userId = user.id
+        existingAccessToken = None
+        try:
+            # retrieve user access token record if it exists
+            existingAccessToken = UserAccessTokens.objects.get(user_id=userId)
+            # check if existingAccessToken hasn't expired
+            if existingAccessToken.expires_at > timezone.now():
+                return existingAccessToken.access_token, "success"
+
+        except ObjectDoesNotExist:
+            pass
+
+        # enroute to create a new access token
+        if existingAccessToken:
+            # delete existingToken before creating a new
+            existingAccessToken.delete()
+
+        # create a new record
+        generatedToken = secrets.token_urlsafe()
+        userAccessTokenRecord = UserAccessTokens(user_id=userId,
+                                                 expires_at=getExpiresAt(),
+                                                 access_token=generatedToken
+                                                 )
+        #  commit to DB
+        userAccessTokenRecord.save()
+
+        return generatedToken, 'success'
+
+    except Exception as e:
+        logger.error(
+            "generateUserAccessToken@Error ::: Error occurred while generating user access token")
+        logger.error(e)
+        return None, str(e)
+
 
 def getUserByAccessToken(accessToken):
     try:
