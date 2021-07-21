@@ -121,7 +121,7 @@ def generateUserAccessToken(user):
 
     except Exception as e:
         logger.error(
-            "generateUserAccessToken@Error ::: Error occurred while generating user access token")
+            "generateUserAccessToken@Error :: Error occurred while generating user access token")
         logger.error(e)
         return None, str(e)
 
