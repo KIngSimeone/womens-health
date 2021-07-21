@@ -1,4 +1,5 @@
 import re
+
 from data_transformer.views import stringIsInteger
 
 
