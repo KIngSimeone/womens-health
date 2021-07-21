@@ -1,6 +1,7 @@
-from .views import provisionPatient
-from errors.views import ErrorCodes
 from api_utils.views import badRequestResponse, requestResponse
+from errors.views import ErrorCodes
+
+from .views import provisionPatient
 
 
 def patient_router(request):
