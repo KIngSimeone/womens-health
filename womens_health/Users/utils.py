@@ -29,7 +29,7 @@ def getPatientById(patientId):
         return patient, "success"
 
     except ObjectDoesNotExist as e:
-        logger.error(f"Patient with ID: {patient} does not exist")
+        logger.error(f"Patient with ID: {patientId} does not exist")
         logger.error(e)
         return None, str(e)
 
