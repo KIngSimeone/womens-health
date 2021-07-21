@@ -11,7 +11,6 @@ class Patient(models.Model):
     address = models.TextField(null=True)
     birthday = models.DateField(null=True)
     password = models.TextField()
-    image = models.TextField(null=True)
 
     created_at = models.DateTimeField("created_at", auto_now_add=True)
     updated_at = models.DateTimeField("updated_at", auto_now=True)
