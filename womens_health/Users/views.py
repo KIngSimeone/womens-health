@@ -35,15 +35,15 @@ def provisionPatient(request):
                                 "Invalid Secret specified in the request headers")
 
     # check if required fields are present in request payload
-    missing_keys = validateKeys(payload=body, requiredKeys=['firstname', 'lastname', 'email', 'phone', 'password', 'birthday'])
+    missing_keys = validateKeys(payload=body, requiredKeys=['firstName', 'lastName', 'email', 'phone', 'password', 'birthday'])
     if missing_keys:
         return requestResponse(
             badRequestResponse, ErrorCodes.MISSING_FIELDS,
             f"The following key(s) are missing in the request "
             f"payload: {missing_keys}")
 
-    firstname = body['firstname'].strip()
-    lastname = body['lastname'].strip()
+    firstname = body['firstName'].strip()
+    lastname = body['lastName'].strip()
     phone = body['phone'].strip()
     email = body['email']
     password = body['password']

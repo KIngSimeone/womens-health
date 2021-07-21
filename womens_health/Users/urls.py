@@ -3,5 +3,5 @@ from django.urls import path
 from . import routers
 
 urlpatterns = [
-    path('',routers.patient_router)
+    path('/patient',routers.patient_router)
 ]
