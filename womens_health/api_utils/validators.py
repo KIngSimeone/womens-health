@@ -37,6 +37,10 @@ def validateKeys(payload, requiredKeys):
     return missingKeys
 
 
+def validateThatStringIsEmpty(value):
+    return (len(value.strip()) > 0)
+
+
 def validate_input_list_is_empty_and_clean(inputList):
 
     for item in inputList:
