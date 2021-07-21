@@ -1,3 +1,21 @@
+import re
+from data_transformer.views import stringIsInteger
+
+
+def validateEmailFormat(email):
+    emailPattern = r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$'
+
+    if(re.search(emailPattern, email)):
+        return True
+    return False
+
+
+def validatePhoneFormat(phone):
+    if not stringIsInteger(phone):
+        return False
+    else:
+        return True
+
 def validateKeys(payload, requiredKeys):
     # extract keys from payload
     payloadKeys = list(payload.keys())
@@ -9,6 +27,13 @@ def validateKeys(payload, requiredKeys):
             missingKeys.append(key)
 
     return missingKeys
+
+
+def validate_input_list_is_empty_and_clean(inputList):
+
+    for item in inputList:
+        if validateThatStringIsEmptyAndClean(item):
+            return True
 
 def validateInputFormat(inputList, email, phone):
     if not validate_input_list_is_empty_and_clean(inputList):
