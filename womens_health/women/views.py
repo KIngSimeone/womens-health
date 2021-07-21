@@ -32,9 +32,15 @@ def createCycles(request):
                                 "Your session has expired. Please login.")
 
     # check if required fields are present in request payload
-    missing_keys = validateKeys(payload=body, requiredKeys=['Last_period_date', 'Cycle_average', 'Period_average', 'Start_date', 'password', 'end_date'])
+    missing_keys = validateKeys(payload=body, requiredKeys=['Last_period_date', 'Cycle_average', 'Period_average', 'Start_date', 'end_date'])
     if missing_keys:
         return requestResponse(
             badRequestResponse, ErrorCodes.MISSING_FIELDS,
             f"The following key(s) are missing in the request "
             f"payload: {missing_keys}")
+    
+    last_period_date = body['Last_period_date']
+    cycle_average = body['Cycle_average']
+    period_average = body['Period_average']
+    start_date = body['Start_date']
+    end_date = body['end_date']
