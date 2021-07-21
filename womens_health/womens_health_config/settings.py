@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'api_utils',
     'data_transformer',
     'errors',
-    'women'
+    'women',
+    'Users',
 ]
 
 MIDDLEWARE = [
