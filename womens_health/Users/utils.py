@@ -98,8 +98,7 @@ def authenticateUser(userIdentity, password):
             Q(phone__iexact=userIdentity) | Q(email__iexact=userIdentity))
         if users.count() > 0:
             existingUser = users[0]
-            if not existingUser.is_active:
-                return None
+            
             # compare if both hashes are the same
             if check_password(password, existingUser.password):
                 existingUser.last_active_on = timezone.now()
