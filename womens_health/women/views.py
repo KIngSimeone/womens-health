@@ -1,14 +1,15 @@
 import json
 import logging
+
+from api_utils.views import (badRequestResponse, internalServerErrorResponse,
+                             requestResponse, resourceConflictResponse,
+                             resourceNotFoundResponse, successResponse,
+                             unAuthenticatedResponse, unAuthorizedResponse)
+from data_transformer.views import dateIsISO
 from django.conf import settings
 from errors.views import ErrorCodes
-from api_utils.views import (
-    badRequestResponse, resourceConflictResponse, internalServerErrorResponse,
-    unAuthenticatedResponse, requestResponse,
-    unAuthorizedResponse, successResponse, resourceNotFoundResponse
-)
 from Users.utils import getUserByAccessToken
-from data_transformer.views import dateIsISO
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
