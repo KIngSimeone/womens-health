@@ -14,3 +14,18 @@ For Security reasons users must have the secret key passed as `Secret` in their 
 `LC9euClrULxcXghvIAf60VGkSESF6c5U7meVgD4tCEfGakZZH9l67eE7N2a3rFfi0IA6lpynEB0vajaSF8CeSKI3qGUoM2PAMYN780bmabzCESY2Dv3azFeV7suaY4S4cI0MyUxvPtQ97xYlbKxLkVaJ1N2fz2ghGWSwO2EnzPSoc7i3UIr5jATrVWuN90Ui3vO90FbQI4Kgce12GVns8zrWcM0PXHSdim8sSSiPWAvMJ904y2k5F3x93jpOVmR1`
 
 Note: Secret key is also available in `.env` file for use
+
+Below is the endpoint to sign up:
+`localhost:8000/v1/users/patient`
+
+Below is a sample sign up request body:
+```
+{
+    "firstName": "Atinuke",
+    "lastName": "Okon",
+    "phone": "07066782651",
+    "email": "aitokon@gmail.com",
+    "password": "Jehovah01",
+    "birthday": "1974-07-15"
+}
+```
