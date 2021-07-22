@@ -82,7 +82,14 @@ def createCycles(request):
     correct_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                     next_period_date, cycle_average, period_average)
 
+    total_no_of_days = parsed_end_date - correct_date
+    delta_total_no_of_days = total_no_of_days.days
+
+    total_created_cycles = delta_total_no_of_days / cycle_average + period_average    
+
     data = {
+        "total_created_cycles": round(total_created_cycles),
+        "totalDays": delta_total_no_of_days,
         "next_period_date": correct_date
     }
 
