@@ -178,7 +178,40 @@ def cycleEvent(request):
 
         })
         correct_start_date = period_end_date + delta_cycle_average
+    event = ""
+    for cycle in periodCycles:
+        dict_start_date = cycle['start_date']
+        dict_end_date = cycle['end_date']
+        dict_ovulation_date = cycle['ovulation_date']
+        dict_fertility_window_start = cycle['fertility_window_start']
+        dict_fertility_window_end = cycle['fertility_window_end']
+        dict_pre_ovulation_window_start = cycle['pre_ovulation_window_start']
+        dict_pre_ovulation_window_end = cycle['pre_ovulation_window_end']
+        dict_post_ovulation_window_start = cycle['post_ovulation_window_start']
+        dict_post_ovulation_window_end = cycle['post_ovulation_window_end']
 
-    data = periodCycles
-    print(len(periodCycles))
+        if dict_start_date <= parsed_given_date <= dict_end_date:
+            event = "period_cycle"
+            break
+
+        elif parsed_given_date == dict_ovulation_date:
+            event = "ovulate_date"
+            break
+
+        elif dict_fertility_window_start <= parsed_given_date <= dict_fertility_window_end:
+            event = "fertility_window"
+            break
+        
+        elif dict_pre_ovulation_window_start <= parsed_given_date <= dict_pre_ovulation_window_end:
+            event = "pre_ovulation_window"
+            break
+    
+        elif dict_post_ovulation_window_start <= parsed_given_date <= dict_post_ovulation_window_end:
+            event = "post_ovulation_window"
+            break
+
+    data = {
+        "given_date": given_date,
+        "event": event
+    }
     return successResponse(message="success", body=data)
