@@ -11,9 +11,13 @@ from django.conf import settings
 from errors.views import ErrorCodes
 from Users.utils import getUserByAccessToken
 from api_utils.validators import validateKeys
-from .utils import createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient
+from .utils import (
+    createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient, checkDateinRange
+)
 from .models import PeriodInfo
+from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+import pytz
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -69,10 +73,16 @@ def createCycles(request):
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
     delta = relativedelta(days=cycle_average)
-    next_period_date = last_period_date + delta
+    parsed_last_period_date =  pytz.utc.localize(parse(last_period_date))
+    next_period_date = parsed_last_period_date + delta
+    parsed_start_date = pytz.utc.localize(parse(start_date))
+    parsed_end_date = pytz.utc.localize(parse(end_date))
+
+    correct_date = checkDateinRange(parsed_start_date, parsed_end_date,
+                                    next_period_date, cycle_average, period_average)
 
     data = {
-        "next_period_date": next_period_date
+        "next_period_date": correct_date
     }
 
     return successResponse(message="success", body=data)

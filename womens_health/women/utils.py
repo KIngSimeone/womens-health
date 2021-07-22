@@ -1,6 +1,7 @@
 import logging
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
+from dateutil.relativedelta import relativedelta
 
 from .models import PeriodInfo
 
@@ -51,3 +52,14 @@ def getPeriodinfoByPatient(patient):
         logger.error("getPeriodinfoByPatient@error")
         logger.error(e)
         return None
+
+def checkDateinRange(start_date, end_date, next_date, cycle_average, period_average):
+    """Check if date in range"""
+    while not start_date <= next_date >= end_date:
+        delta = relativedelta(days=cycle_average+period_average)
+        next_date = next_date + delta
+        print("inside loop")
+    else:
+        print("outside loop")
+        return next_date
+
