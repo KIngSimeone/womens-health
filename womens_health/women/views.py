@@ -149,9 +149,16 @@ def cycleEvent(request):
     correct_start_date = checkDateinRange(start_date, end_date,
                                     next_period_date, cycle_average, period_average)
 
-
-    data = {
-        "date": given_date
-    }
+    periodCycles = list()
+    cycles = dict()
+    while correct_start_date <= end_date:
+        delta = relativedelta(days=period_average)
+        period_end_date = correct_start_date + delta
+        cycles = {
+                "start_date": correct_start_date, "end_date": period_end_date
+            }
+        correct_start_date = period_end_date + cycle_average
+        
+    data = cycles
 
     return successResponse(message="success", body=data)
