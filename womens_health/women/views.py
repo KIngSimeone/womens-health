@@ -142,7 +142,7 @@ def cycleEvent(request):
                                ErrorCodes.GENERIC_ERROR,
                                "Given date not in set date date range")
     
-    delta = relativedelta(days=cycle_average)
+    delta = relativedelta(days=int(cycle_average))
     parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
     next_period_date = parsed_last_period_date + delta
 
@@ -152,7 +152,7 @@ def cycleEvent(request):
     periodCycles = list()
     cycles = dict()
     while correct_start_date <= end_date:
-        delta = relativedelta(days=period_average)
+        delta = relativedelta(days=int(period_average))
         period_end_date = correct_start_date + delta
         cycles = {
                 "start_date": correct_start_date, "end_date": period_end_date
