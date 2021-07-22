@@ -15,7 +15,7 @@ For Security reasons users must have the secret key passed as `Secret` in their 
 
 Note: Secret key is also available in `.env` file for use
 
-Below is the endpoint to sign up:
+Below is the endpoint to sign up: `POST`,
 `localhost:8000/v1/users/patient`
 
 Below is a sample sign up request body:
@@ -31,7 +31,7 @@ Below is a sample sign up request body:
 ```
 After Sign up user can login to the platform with will return their access token in the response body. Please note `Secret` is also required in the request headers to login
 
-Below is the log in endpoint:
+Below is the log in endpoint: `POST`,
 `localhost:8000/v1/login`
 
 Below is a sample request body, Users can use phone or email to login:
@@ -67,7 +67,7 @@ This endpoint will estimate the period cycles for the current logged in user/pat
 
 **Just a note `Token` is required in the request headers to use below endpoints.**
 
-Below is the endpoint to estimate cycles: `localhost:8000/v1/women/create-cycles`
+Below is the endpoint to estimate cycles: `POST`, `localhost:8000/v1/women/create-cycles`
 
 Below is a sample request body:
 ```
@@ -97,7 +97,7 @@ This endpoint will determine the current period a user/patient is in in her peri
 
 **Just a note `Token` is required in the request headers to use below endpoints.**
 
-Below is the endpoint to determine current the period cycle of a user based on date: 
+Below is the endpoint to determine current the period cycle of a user based on date: `GET`,
 `localhost:8000/v1/women/cycle-event?date=2020-07-25`
 
 
