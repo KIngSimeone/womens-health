@@ -67,4 +67,4 @@ def createCycles(request):
     if not updatedpatientPeriodInfo:
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
-    
+    return successResponse(message="success", body={})
