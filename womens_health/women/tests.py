@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.test import Client, TestCase
 from Users.models import Patient
-from women.models import PeriodInfo, tests
+from women.models import PeriodInfo
 from django.contrib.auth.hashers import make_password
 import uuid
 
@@ -58,7 +58,7 @@ class WomensTest(TestCase):
                                         follow=True, secure=False,
                                         HTTP_ACCEPT='application/json',
                                         content_type="application/json",
-                                        HTTP_SECRET=settings.TEST_SECRET,
+                                        HTTP_SECRET=settings.ROOT_SECRET,
                                         HTTP_Token=login_response.json()['data'][
                                             'accessToken']
                                         )
@@ -79,7 +79,7 @@ class WomensTest(TestCase):
                                         follow=True, secure=False,
                                         HTTP_ACCEPT='application/json',
                                         content_type="application/json",
-                                        HTTP_SECRET=settings.TEST_SECRET,
+                                        HTTP_SECRET=settings.ROOT_SECRET,
                                         HTTP_Token=login_response.json()['data'][
                                             'accessToken']
                                         )
