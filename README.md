@@ -29,3 +29,33 @@ Below is a sample sign up request body:
     "birthday": "1974-07-15"
 }
 ```
+After Sign up user can login to the platform with will return their access token in the response body. Please note `Secret` is also required in the request headers to login
+
+Below is the log in endpoint:
+`localhost:8000/v1/login`
+
+Below is a sample request body, Users can use phone or email to login:
+```
+{
+    "userIdentity": "aitokon@gmail.com",
+    "password": "Jehovah01"
+}
+```
+
+Below is the login response:
+```
+{
+    "data": {
+        "id": 1826014,
+        "firstName": "Atinuke",
+        "lastName": "Okon",
+        "email": "aitokon@gmail.com",
+        "phone": "07066782651",
+        "address": null,
+        "birthday": "1974-07-15",
+        "accessToken": "ApEU4pTCULDVMi2z7ZQuK-euiMabYblCMF_20egT0J0"
+    },
+    "metaData": null,
+    "message": "successfully authenticated"
+}
+```
