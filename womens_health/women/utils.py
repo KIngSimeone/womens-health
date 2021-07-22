@@ -65,9 +65,7 @@ def checkDateinRange(start_date, end_date, next_date, cycle_average, period_aver
         while not start_date <= next_date <= end_date:
             delta = relativedelta(days=cycle_average+period_average)
             next_date = next_date + delta
-            print("inside loop")
         else:
-            print("outside loop")
             return next_date
 
     return next_date
