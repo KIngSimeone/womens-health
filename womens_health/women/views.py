@@ -11,7 +11,7 @@ from django.conf import settings
 from errors.views import ErrorCodes
 from Users.utils import getUserByAccessToken
 from api_utils.validators import validateKeys
-from .utils import createPeriodInfo, updatePeriodInfo
+from .utils import createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient
 from .models import PeriodInfo
 
 # Get an instance of a logger
@@ -55,7 +55,7 @@ def createCycles(request):
             "Last period date is invalid or empty - It must be in YYYY-MM-DD format")
 
     # get logged in patients period info
-    patientPeriodInfo = PeriodInfo.objects.get(patient=user)
+    patientPeriodInfo = getPeriodinfoByPatient(user)
     if not patientPeriodInfo:
         patientPeriodInfo, msg = createPeriodInfo(user, cycle_average, period_average,
                                                   last_period_date)
