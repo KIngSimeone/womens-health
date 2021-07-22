@@ -74,28 +74,36 @@ def createCycles(request):
     # get logged in patients period info
     patientPeriodInfo = getPeriodinfoByPatient(user)
     if not patientPeriodInfo:
+        # create a new patient periodinfo
         patientPeriodInfo, msg = createPeriodInfo(user, cycle_average, period_average,
                                                   last_period_date, start_date, end_date)
         if not patientPeriodInfo:
             requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
+    # update patient period info
     updatedpatientPeriodInfo, msg = updatePeriodInfo(patientPeriodInfo, cycle_average, period_average,
                                                      last_period_date, start_date, end_date)
     if not updatedpatientPeriodInfo:
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
+    # converts cycle_avegare to relative delta object
     delta = relativedelta(days=cycle_average)
+
+    # converts dates from string to date objects
     parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
     next_period_date = parsed_last_period_date + delta
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
+    # checks if current period next date is in given range if not gets correct date
     correct_start_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                           next_period_date, cycle_average, period_average)
 
+    # get total no_of days in range and convert to day object
     total_no_of_days = parsed_end_date - correct_start_date
     delta_total_no_of_days = total_no_of_days.days
 
+    # get total created cycles
     total_created_cycles = delta_total_no_of_days / cycle_average + period_average
 
     data = {
