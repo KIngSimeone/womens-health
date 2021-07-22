@@ -66,14 +66,14 @@ def createCycles(request):
                                                   last_period_date)
         if not patientPeriodInfo:
             requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
-    
+
     updatedpatientPeriodInfo, msg = updatePeriodInfo(patientPeriodInfo, cycle_average, period_average,
-                                                    last_period_date)
+                                                     last_period_date)
     if not updatedpatientPeriodInfo:
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
     delta = relativedelta(days=cycle_average)
-    parsed_last_period_date =  pytz.utc.localize(parse(last_period_date))
+    parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
     next_period_date = parsed_last_period_date + delta
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
@@ -85,13 +85,14 @@ def createCycles(request):
     total_no_of_days = parsed_end_date - correct_date
     delta_total_no_of_days = total_no_of_days.days
 
-    total_created_cycles = delta_total_no_of_days / cycle_average + period_average    
+    total_created_cycles = delta_total_no_of_days / cycle_average + period_average
 
     data = {
         "total_created_cycles": round(total_created_cycles)
     }
 
     return successResponse(message="success", body=data)
+
 
 def cycleEvent(request):
     token = request.headers.get('Token')
@@ -112,3 +113,9 @@ def cycleEvent(request):
         return requestResponse(
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Given date is invalid or empty - It must be in YYYY-MM-DD format")
+
+    data = {
+        "date": given_date
+    }
+
+    return successResponse(message="success", body=data)
