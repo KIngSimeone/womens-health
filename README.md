@@ -9,9 +9,8 @@ A REST API that helps estimate a woman’s period cycles within a specific timef
 
 ### Sign Up
 Sign up is neccesary on the platform.
-For Security reasons users must have the secret key passed as `Secret` in their request headers to sign up, below is the current secret key and a sample as it is passed in as `Secret` in postman.
+For Security reasons users must have the secret key passed as `Secret` in their request headers to sign up, below is the current secret key
 
 `LC9euClrULxcXghvIAf60VGkSESF6c5U7meVgD4tCEfGakZZH9l67eE7N2a3rFfi0IA6lpynEB0vajaSF8CeSKI3qGUoM2PAMYN780bmabzCESY2Dv3azFeV7suaY4S4cI0MyUxvPtQ97xYlbKxLkVaJ1N2fz2ghGWSwO2EnzPSoc7i3UIr5jATrVWuN90Ui3vO90FbQI4Kgce12GVns8zrWcM0PXHSdim8sSSiPWAvMJ904y2k5F3x93jpOVmR1`
 
-![postman_secret](https://drive.google.com/file/d/1aH9EPp-aSa1ab6JO7M5VMwgRPibBTXe5/view?usp=sharing)
 Note: Secret key is also available in `.env` file for use
