@@ -90,10 +90,10 @@ def createCycles(request):
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
-    correct_date = checkDateinRange(parsed_start_date, parsed_end_date,
+    correct_start_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                     next_period_date, cycle_average, period_average)
 
-    total_no_of_days = parsed_end_date - correct_date
+    total_no_of_days = parsed_end_date - correct_start_date
     delta_total_no_of_days = total_no_of_days.days
 
     total_created_cycles = delta_total_no_of_days / cycle_average + period_average
@@ -133,11 +133,22 @@ def cycleEvent(request):
 
     start_date = patientPeriodInfo.start_date
     end_date = patientPeriodInfo.end_date
+    cycle_average = patientPeriodInfo.cycle_average
+    last_period_date = patientPeriodInfo.last_period_date
+    period_average = patientPeriodInfo.period_average
 
     if not start_date <= parsed_given_date <= end_date:
         return requestResponse(badRequestResponse,
                                ErrorCodes.GENERIC_ERROR,
                                "Given date not in set date date range")
+    
+    delta = relativedelta(days=cycle_average)
+    parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
+    next_period_date = parsed_last_period_date + delta
+
+    correct_start_date = checkDateinRange(start_date, end_date,
+                                    next_period_date, cycle_average, period_average)
+
 
     data = {
         "date": given_date
