@@ -162,7 +162,8 @@ def cycleEvent(request):
         delta_ovulation = relativedelta(days=1)
         pre_ovulation_window_start = period_end_date + delta_ovulation
         pre_ovulation_window_end = fertility_window_start - delta_ovulation
-
+        post_ovulation_window_start = fertility_window_end + delta_ovulation
+        post_ovulation_window_end = full_cycle_end - delta_ovulation
         periodCycles.append({
             "start_date": correct_start_date,
             "end_date": period_end_date,
@@ -171,7 +172,10 @@ def cycleEvent(request):
             "fertility_window_start": fertility_window_start,
             "fertility_window_end": fertility_window_end,
             "pre_ovulation_window_start": pre_ovulation_window_start,
-            "pre_ovulation_window_end": pre_ovulation_window_end
+            "pre_ovulation_window_end": pre_ovulation_window_end,
+            "post_ovulation_window_start": post_ovulation_window_start,
+            "post_ovulation_window_end": post_ovulation_window_end
+
         })
         correct_start_date = period_end_date + delta_cycle_average
 
