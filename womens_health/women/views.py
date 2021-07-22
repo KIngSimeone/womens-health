@@ -13,6 +13,7 @@ from Users.utils import getUserByAccessToken
 from api_utils.validators import validateKeys
 from .utils import createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient
 from .models import PeriodInfo
+from dateutil.relativedelta import relativedelta
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -67,4 +68,11 @@ def createCycles(request):
     if not updatedpatientPeriodInfo:
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
-    return successResponse(message="success", body={})
+    delta = relativedelta(days=cycle_average)
+    next_period_date = last_period_date + delta
+
+    data = {
+        "next_period_date": next_period_date
+    }
+
+    return successResponse(message="success", body=data)
