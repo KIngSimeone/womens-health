@@ -91,7 +91,7 @@ def createCycles(request):
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
     correct_start_date = checkDateinRange(parsed_start_date, parsed_end_date,
-                                    next_period_date, cycle_average, period_average)
+                                          next_period_date, cycle_average, period_average)
 
     total_no_of_days = parsed_end_date - correct_start_date
     delta_total_no_of_days = total_no_of_days.days
@@ -141,24 +141,34 @@ def cycleEvent(request):
         return requestResponse(badRequestResponse,
                                ErrorCodes.GENERIC_ERROR,
                                "Given date not in set date date range")
-    
+
     delta = relativedelta(days=int(cycle_average))
-    parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
-    next_period_date = parsed_last_period_date + delta
+    next_period_date = last_period_date + delta
 
     correct_start_date = checkDateinRange(start_date, end_date,
-                                    next_period_date, cycle_average, period_average)
+                                          next_period_date, cycle_average, period_average)
 
     periodCycles = list()
-    cycles = dict()
-    while correct_start_date <= end_date:
+    while correct_start_date < end_date:
         delta = relativedelta(days=int(period_average))
+        delta_cycle_average = relativedelta(days=int(cycle_average))
+        full_cycle_delta = relativedelta(days=int(cycle_average) + int(period_average))
         period_end_date = correct_start_date + delta
-        cycles = {
-                "start_date": correct_start_date, "end_date": period_end_date
-            }
-        correct_start_date = period_end_date + cycle_average
-        
-    data = cycles
+        full_cycle_end = correct_start_date + full_cycle_delta
+        ovulation_date = correct_start_date + delta_cycle_average / 2
+        delta_fertility = relativedelta(days=4)
+        fertility_window_start = ovulation_date - delta_fertility
+        fertility_window_end = ovulation_date + delta_fertility
+        periodCycles.append({
+            "start_date": correct_start_date,
+            "end_date": period_end_date,
+            "full_cycle_end": full_cycle_end,
+            "ovulation_date": ovulation_date,
+            "fertility_window_start": fertility_window_start,
+            "fertility_window_end": fertility_window_end
+        })
+        correct_start_date = period_end_date + delta_cycle_average
 
+    data = periodCycles
+    print(len(periodCycles))
     return successResponse(message="success", body=data)
