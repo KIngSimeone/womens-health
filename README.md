@@ -59,3 +59,6 @@ Below is the login response:
     "message": "successfully authenticated"
 }
 ```
+**Please not you can login in with the credentials in the login request body, so u dont have to create a new user**
+
+## Estimate Cycles
