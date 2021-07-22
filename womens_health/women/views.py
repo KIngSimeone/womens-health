@@ -2,7 +2,7 @@ import json
 import logging
 from re import I
 
-from api_utils.views import (badRequestResponse, internalServerErrorResponse,
+from api_utils.views import (badRequestResponse, errorResponse, internalServerErrorResponse,
                              requestResponse, resourceConflictResponse,
                              resourceNotFoundResponse, successResponse,
                              unAuthenticatedResponse, unAuthorizedResponse)
@@ -58,13 +58,13 @@ def createCycles(request):
         return requestResponse(
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Last period date is invalid or empty - It must be in YYYY-MM-DD format")
-    
+
     # validate start_date format
     if not dateIsISO(start_date):
         return requestResponse(
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Start date is invalid or empty - It must be in YYYY-MM-DD format")
-    
+
      # validate start_date format
     if not dateIsISO(end_date):
         return requestResponse(
@@ -125,6 +125,22 @@ def cycleEvent(request):
         return requestResponse(
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Given date is invalid or empty - It must be in YYYY-MM-DD format")
+
+    patientPeriodInfo = getPeriodinfoByPatient(user)
+    if not patientPeriodInfo:
+        return requestResponse(resourceNotFoundResponse, ErrorCodes.GENERIC_ERROR,
+                               "PeriodInfo not found")
+    parsed_given_date = pytz.utc.localize(parse(given_date))
+
+    start_date = patientPeriodInfo.start_date
+    end_date = patientPeriodInfo.end_date
+    parsed_start_date = pytz.utc.localize(parse(start_date))
+    parsed_end_date = pytz.utc.localize(parse(end_date))
+
+    if not parsed_start_date <= parsed_given_date >= parsed_end_date:
+        return requestResponse(badRequestResponse,
+                               ErrorCodes.GENERIC_ERROR,
+                               "Given date not in set date date range")
 
     data = {
         "date": given_date
