@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from Users.views import login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users', include('Users.urls')),
+    path('login', login),
+    path('women', include('women.urls')),
 ]
 
 # Add 'prefix' to all urlpatterns

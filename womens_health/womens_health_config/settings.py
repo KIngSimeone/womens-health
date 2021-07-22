@@ -34,6 +34,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 # Add 'prefix' to all urlpatterns
 API_VERSION = os.getenv('API_VERSION')
 
+# reset token expiration time
+DURATION = os.getenv('DURATION')
 
 # Application definition
 
