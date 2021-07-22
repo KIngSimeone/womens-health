@@ -2,22 +2,23 @@ import json
 import logging
 from re import I
 
-from api_utils.views import (badRequestResponse, errorResponse, internalServerErrorResponse,
-                             requestResponse, resourceConflictResponse,
+import pytz
+from api_utils.validators import validateKeys
+from api_utils.views import (badRequestResponse, errorResponse,
+                             internalServerErrorResponse, requestResponse,
+                             resourceConflictResponse,
                              resourceNotFoundResponse, successResponse,
                              unAuthenticatedResponse, unAuthorizedResponse)
 from data_transformer.views import dateIsISO
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from errors.views import ErrorCodes
 from Users.utils import getUserByAccessToken
-from api_utils.validators import validateKeys
-from .utils import (
-    createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient, checkDateinRange
-)
+
 from .models import PeriodInfo
-from dateutil.parser import parse
-from dateutil.relativedelta import relativedelta
-import pytz
+from .utils import (checkDateinRange, createPeriodInfo, getPeriodinfoByPatient,
+                    updatePeriodInfo)
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
