@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users', include('Users.urls')),
     path('login', login),
+    path('women', include('women.urls')),
 ]
 
 # Add 'prefix' to all urlpatterns
