@@ -1,21 +1,21 @@
 import json
 import logging
+
+from api_utils.validators import (validateInputFormat, validateKeys,
+                                  validateThatStringIsEmpty)
+from api_utils.views import (badRequestResponse, internalServerErrorResponse,
+                             requestResponse, resourceConflictResponse,
+                             successResponse,
+                             unAuthenticatedResponse, unAuthorizedResponse)
+from data_transformer.json_serializer import (transformPatient,
+                                              userLoginResponse)
+from data_transformer.views import dateIsISO
 from django.conf import settings
 from errors.views import ErrorCodes
-from api_utils.views import (
-    badRequestResponse, resourceConflictResponse, internalServerErrorResponse,
-    unAuthenticatedResponse, requestResponse,
-    unAuthorizedResponse, successResponse, resourceNotFoundResponse
-)
-from api_utils.validators import (
-    validateKeys, validateInputFormat, validateThatStringIsEmpty
-)
-from .utils import (
-    authenticateUser, createPatient, getPatientByInputs, generateUserAccessToken,
-    authenticateUser
-)
-from data_transformer.views import dateIsISO
-from data_transformer.json_serializer import transformPatient, userLoginResponse
+
+from .utils import (authenticateUser, createPatient, generateUserAccessToken,
+                    getPatientByInputs)
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 

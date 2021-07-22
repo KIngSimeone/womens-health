@@ -2,22 +2,23 @@ import json
 import logging
 from re import I
 
-from api_utils.views import (badRequestResponse, errorResponse, internalServerErrorResponse,
-                             requestResponse, resourceConflictResponse,
+import pytz
+from api_utils.validators import validateKeys
+from api_utils.views import (badRequestResponse, errorResponse,
+                             internalServerErrorResponse, requestResponse,
+                             resourceConflictResponse,
                              resourceNotFoundResponse, successResponse,
                              unAuthenticatedResponse, unAuthorizedResponse)
 from data_transformer.views import dateIsISO
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from errors.views import ErrorCodes
 from Users.utils import getUserByAccessToken
-from api_utils.validators import validateKeys
-from .utils import (
-    createPeriodInfo, updatePeriodInfo, getPeriodinfoByPatient, checkDateinRange
-)
+
 from .models import PeriodInfo
-from dateutil.parser import parse
-from dateutil.relativedelta import relativedelta
-import pytz
+from .utils import (checkDateinRange, createPeriodInfo, getPeriodinfoByPatient,
+                    updatePeriodInfo)
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -74,28 +75,36 @@ def createCycles(request):
     # get logged in patients period info
     patientPeriodInfo = getPeriodinfoByPatient(user)
     if not patientPeriodInfo:
+        # create a new patient periodinfo
         patientPeriodInfo, msg = createPeriodInfo(user, cycle_average, period_average,
                                                   last_period_date, start_date, end_date)
         if not patientPeriodInfo:
             requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
+    # update patient period info
     updatedpatientPeriodInfo, msg = updatePeriodInfo(patientPeriodInfo, cycle_average, period_average,
                                                      last_period_date, start_date, end_date)
     if not updatedpatientPeriodInfo:
         return requestResponse(internalServerErrorResponse, ErrorCodes.GENERIC_ERROR, msg)
 
+    # converts cycle_avegare to relative delta object
     delta = relativedelta(days=cycle_average)
+
+    # converts dates from string to date objects
     parsed_last_period_date = pytz.utc.localize(parse(last_period_date))
     next_period_date = parsed_last_period_date + delta
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
+    # checks if current period next date is in given range if not gets correct date
     correct_start_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                           next_period_date, cycle_average, period_average)
 
+    # get total no_of days in range and convert to day object
     total_no_of_days = parsed_end_date - correct_start_date
     delta_total_no_of_days = total_no_of_days.days
 
+    # get total created cycles
     total_created_cycles = delta_total_no_of_days / cycle_average + period_average
 
     data = {
@@ -106,6 +115,7 @@ def createCycles(request):
 
 
 def cycleEvent(request):
+    """get date event endpoint"""
     token = request.headers.get('Token')
     if token is None:
         return requestResponse(badRequestResponse, ErrorCodes.INVALID_CREDENTIALS,
@@ -125,10 +135,13 @@ def cycleEvent(request):
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Given date is invalid or empty - It must be in YYYY-MM-DD format")
 
+    # get patients period info
     patientPeriodInfo = getPeriodinfoByPatient(user)
     if not patientPeriodInfo:
         return requestResponse(resourceNotFoundResponse, ErrorCodes.GENERIC_ERROR,
                                "PeriodInfo not found")
+
+    # convert given date to date object
     parsed_given_date = pytz.utc.localize(parse(given_date)).date()
 
     start_date = patientPeriodInfo.start_date
@@ -145,11 +158,17 @@ def cycleEvent(request):
     delta = relativedelta(days=int(cycle_average))
     next_period_date = last_period_date + delta
 
+    # checks if current period next date is in given range if not gets correct date
     correct_start_date = checkDateinRange(start_date, end_date,
                                           next_period_date, cycle_average, period_average)
 
+    # create empty period Cycles list
     periodCycles = list()
+
+    # while the correct date is less than
     while correct_start_date < end_date:
+
+        # set params for different cycle periods and keys
         delta = relativedelta(days=int(period_average))
         delta_cycle_average = relativedelta(days=int(cycle_average))
         full_cycle_delta = relativedelta(days=int(cycle_average) + int(period_average))
@@ -164,6 +183,8 @@ def cycleEvent(request):
         pre_ovulation_window_end = fertility_window_start - delta_ovulation
         post_ovulation_window_start = fertility_window_end + delta_ovulation
         post_ovulation_window_end = full_cycle_end - delta_ovulation
+
+        # Append each cycle period information to list
         periodCycles.append({
             "start_date": correct_start_date,
             "end_date": period_end_date,
@@ -177,8 +198,13 @@ def cycleEvent(request):
             "post_ovulation_window_end": post_ovulation_window_end
 
         })
+        # set correct start date as next period start date
         correct_start_date = period_end_date + delta_cycle_average
+
+    # set event as empty string
     event = ""
+
+    # for each cycle i period cylces get the dict params
     for cycle in periodCycles:
         dict_start_date = cycle['start_date']
         dict_end_date = cycle['end_date']
@@ -190,6 +216,7 @@ def cycleEvent(request):
         dict_post_ovulation_window_start = cycle['post_ovulation_window_start']
         dict_post_ovulation_window_end = cycle['post_ovulation_window_end']
 
+        # set event to period and break after match is met
         if dict_start_date <= parsed_given_date <= dict_end_date:
             event = "period_cycle"
             break
@@ -201,11 +228,11 @@ def cycleEvent(request):
         elif dict_fertility_window_start <= parsed_given_date <= dict_fertility_window_end:
             event = "fertility_window"
             break
-        
+
         elif dict_pre_ovulation_window_start <= parsed_given_date <= dict_pre_ovulation_window_end:
             event = "pre_ovulation_window"
             break
-    
+
         elif dict_post_ovulation_window_start <= parsed_given_date <= dict_post_ovulation_window_end:
             event = "post_ovulation_window"
             break
@@ -214,4 +241,5 @@ def cycleEvent(request):
         "given_date": given_date,
         "event": event
     }
+
     return successResponse(message="success", body=data)

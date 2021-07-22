@@ -30,6 +30,7 @@ def toUiReadableDateFormat(value):
         logger.error(ex)
         return str(value)
 
+
 def stringIsInteger(value):
     try:
         convertedValue = int(value)
