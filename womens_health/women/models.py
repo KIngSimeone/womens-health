@@ -5,6 +5,8 @@ class PeriodInfo(models.Model):
     id = models.AutoField(primary_key=True, editable=False, unique=True)
     cycle_average = models.TextField(null=True)
     period_average = models.TextField(null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     patient = models.ForeignKey(
         Patient, on_delete=models.SET_NULL, null=True)
     last_period_date = models.DateField(null=True)
