@@ -92,3 +92,23 @@ def createCycles(request):
     }
 
     return successResponse(message="success", body=data)
+
+def cycleEvent(request):
+    token = request.headers.get('Token')
+    if token is None:
+        return requestResponse(badRequestResponse, ErrorCodes.INVALID_CREDENTIALS,
+                               "Token is missing in the request headers")
+
+    # get user with access token
+    user = getUserByAccessToken(token)
+    if user is None:
+        return requestResponse(unAuthenticatedResponse, ErrorCodes.UNAUTHENTICATED_REQUEST,
+                               "Your session has expired. Please login.")
+
+    given_date = request.GET.get('date')
+
+    # validate last_period_date format
+    if not dateIsISO(given_date):
+        return requestResponse(
+            badRequestResponse, ErrorCodes.GENERIC_ERROR,
+            "Given date is invalid or empty - It must be in YYYY-MM-DD format")
