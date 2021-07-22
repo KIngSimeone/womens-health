@@ -65,7 +65,7 @@ Below is the login response:
 
 This endpoint will estimate the period cycles for the current logged in user/patient, for authentication user must pass the `accessToken` generated from thier login response in all other endpoints as `Token` in their request headers, this will also identify the current logged in user and retrieve their information
 
-**Just a note `Token` is required in the request headers to use below endpoints.
+**Just a note `Token` is required in the request headers to use below endpoints.**
 
 Below is the endpoint to estimate cycles: `localhost:8000/v1/women/create-cycles`
 
