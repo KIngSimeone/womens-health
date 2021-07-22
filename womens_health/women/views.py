@@ -78,6 +78,7 @@ def createCycles(request):
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
+    print(next_period_date)
     correct_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                     next_period_date, cycle_average, period_average)
 
