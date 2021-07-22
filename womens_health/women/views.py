@@ -58,6 +58,18 @@ def createCycles(request):
         return requestResponse(
             badRequestResponse, ErrorCodes.GENERIC_ERROR,
             "Last period date is invalid or empty - It must be in YYYY-MM-DD format")
+    
+    # validate start_date format
+    if not dateIsISO(start_date):
+        return requestResponse(
+            badRequestResponse, ErrorCodes.GENERIC_ERROR,
+            "Start date is invalid or empty - It must be in YYYY-MM-DD format")
+    
+     # validate start_date format
+    if not dateIsISO(end_date):
+        return requestResponse(
+            badRequestResponse, ErrorCodes.GENERIC_ERROR,
+            "End date is invalid or empty - It must be in YYYY-MM-DD format")
 
     # get logged in patients period info
     patientPeriodInfo = getPeriodinfoByPatient(user)
