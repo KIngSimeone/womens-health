@@ -63,7 +63,7 @@ Below is the login response:
 
 ## Estimate Cycles
 
-This endpoint will estimate the period cycles for the current logged in user/patient, for authentication user must pass the `accessToken` generated from thier login response in all other endpoints as `Token` in their request headers, this will also identify the current logged in user and retrieve their information
+This endpoint will estimate the period cycles for the current logged in user/patient, for authentication purposes user must pass the `accessToken` generated from thier login response in all other endpoints as `Token` in their request headers, this will also identify the current logged in user and retrieve their information
 
 **Just a note `Token` is required in the request headers to use below endpoints.**
 
@@ -90,3 +90,32 @@ Below is sample response body:
     "message": "success"
 }
 ```
+
+## Determine current monthly cycle
+
+This endpoint will determine the current period a user/patient is in in her period cycle based on a given date, for authentication purposes user must pass the `accessToken` generated from thier login response in all other endpoints as `Token` in their request headers, this will also identify the current logged in user and retrieve their information
+
+**Just a note `Token` is required in the request headers to use below endpoints.**
+
+Below is the endpoint to determine current the period cycle of a user based on date: 
+`localhost:8000/v1/women/cycle-event?date=2020-07-25`
+
+
+Below is a sample respose:
+```
+{
+    "data": {
+        "given_date": "2020-07-25",
+        "event": "period_cycle"
+    },
+    "metaData": null,
+    "message": "success"
+}
+```
+Below is the different events in the cycle
+
+* `period_cycle`: Patient is currently in her period
+* `ovulate_date`: Patient is currently on her ovulation date
+* `fertility_window`: Patient is currently in here fertility window
+* `pre_ovulation_window`: Patient is in her preovulation window
+* `post_ovulation_window`: Patient is currently in her postovulationwindow
