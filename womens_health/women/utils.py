@@ -1,5 +1,6 @@
 import logging
 import uuid
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import PeriodInfo
 
@@ -39,3 +40,14 @@ def updatePeriodInfo(periodInfo, cycle_average, period_average, last_period_date
             "updatePeriodInfo@Error :: Error occurred while updating the period information")
         logger.error(e)
         return None, str(e)
+
+def getPeriodinfoByPatient(patient):
+    """retrieve patient periodinfo"""
+    try:
+        periodinfo = PeriodInfo.objects.get(patient=patient)
+        return periodinfo
+
+    except ObjectDoesNotExist as e:
+        logger.error("getPeriodinfoByPatient@error")
+        logger.error(e)
+        return None
