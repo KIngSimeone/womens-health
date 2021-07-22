@@ -88,9 +88,7 @@ def createCycles(request):
     total_created_cycles = delta_total_no_of_days / cycle_average + period_average    
 
     data = {
-        "total_created_cycles": round(total_created_cycles),
-        "totalDays": delta_total_no_of_days,
-        "next_period_date": correct_date
+        "total_created_cycles": round(total_created_cycles)
     }
 
     return successResponse(message="success", body=data)
