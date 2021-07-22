@@ -90,7 +90,6 @@ def createCycles(request):
     parsed_start_date = pytz.utc.localize(parse(start_date))
     parsed_end_date = pytz.utc.localize(parse(end_date))
 
-    print(next_period_date)
     correct_date = checkDateinRange(parsed_start_date, parsed_end_date,
                                     next_period_date, cycle_average, period_average)
 
@@ -130,14 +129,12 @@ def cycleEvent(request):
     if not patientPeriodInfo:
         return requestResponse(resourceNotFoundResponse, ErrorCodes.GENERIC_ERROR,
                                "PeriodInfo not found")
-    parsed_given_date = pytz.utc.localize(parse(given_date))
+    parsed_given_date = pytz.utc.localize(parse(given_date)).date()
 
     start_date = patientPeriodInfo.start_date
     end_date = patientPeriodInfo.end_date
-    parsed_start_date = pytz.utc.localize(parse(start_date))
-    parsed_end_date = pytz.utc.localize(parse(end_date))
 
-    if not parsed_start_date <= parsed_given_date >= parsed_end_date:
+    if not start_date <= parsed_given_date <= end_date:
         return requestResponse(badRequestResponse,
                                ErrorCodes.GENERIC_ERROR,
                                "Given date not in set date date range")
